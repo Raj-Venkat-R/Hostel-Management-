@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hostel_management/admin_home.dart';
+import 'package:hostel_management/admin/admin_sidebar.dart';
 import 'package:hostel_management/student_home.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (role == "admin") {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AdminHome()),
+            MaterialPageRoute(builder: (context) => AdminSideBar()),
           );
         } else if (role == "student") {
           Navigator.push(

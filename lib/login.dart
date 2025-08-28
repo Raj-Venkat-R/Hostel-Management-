@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       final userDoc = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('user')
           .doc(credential.user!.uid)
           .get();
 
@@ -95,6 +95,12 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

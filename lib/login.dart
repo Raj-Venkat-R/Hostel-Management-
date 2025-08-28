@@ -160,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 50, right: 50),
               child: TextField(
+                obscureText: true,
                 controller: _passwordController,
                 style: GoogleFonts.exo2(fontSize: 14, color: Colors.black),
                 decoration: InputDecoration(

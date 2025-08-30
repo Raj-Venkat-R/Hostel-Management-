@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hostel_management/login.dart';
+import 'package:provider/provider.dart';
+
 import 'admin_home.dart';
 import 'admin_settings.dart';
 import 'emergency_request.dart';
 import 'notice_board.dart';
 import 'room_bed_management.dart';
-import 'student_management.dart';
+import 'student_management.dart'; // <-- imports StudentManagement & StudentManagementState
 import 'visitor_management.dart';
-
-bool light = true;
+import 'theme_notifier.dart';
 
 class AdminSideBar extends StatefulWidget {
   const AdminSideBar({super.key});
@@ -19,32 +20,33 @@ class AdminSideBar extends StatefulWidget {
 }
 
 class _AdminSideBarState extends State<AdminSideBar> {
-  List<String> background = ["assets/light-bg.png", "assets/dark-bg.png"];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isDrawerOpen = false;
   int currentPage = 0;
-  int currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const AdminHome(),
-    const StudentManagement(),
-    const RoomBedManagement(),
-    const VisitorManagement(),
-    const EmergencyRequest(),
-    const NoticeBoard(),
-    const AdminSettings(),
-  ];
+  // GlobalKey to access StudentManagementState
+  // final GlobalKey<StudentManagementState> _studentKey =
+  //     GlobalKey<StudentManagementState>();
+
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      const AdminHome(),
+      StudentManagement(),
+      const RoomBedManagement(),
+      const VisitorManagement(),
+      const EmergencyRequest(),
+      const NoticeBoard(),
+      const AdminSettings(),
+    ];
+  }
 
   void _currentPage(int index) {
     setState(() {
       currentPage = index;
-    });
-  }
-
-  void _switchBackground() {
-    setState(() {
-      currentIndex = (currentIndex + 1) % background.length;
-      light = !light;
     });
   }
 
@@ -56,12 +58,36 @@ class _AdminSideBarState extends State<AdminSideBar> {
     }
   }
 
+  String _getPageTitle() {
+    switch (currentPage) {
+      case 0:
+        return "Home";
+      case 1:
+        return "Student Management";
+      case 2:
+        return "Room / Bed Management";
+      case 3:
+        return "Visitor Management";
+      case 4:
+        return "Emergency Request";
+      case 5:
+        return "Notice Board";
+      case 6:
+        return "Settings";
+      default:
+        return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final isDark = themeNotifier.isDarkMode;
+
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(background[currentIndex]),
+          image: AssetImage(themeNotifier.backgroundImage),
           fit: BoxFit.cover,
         ),
       ),
@@ -80,20 +106,31 @@ class _AdminSideBarState extends State<AdminSideBar> {
               : IconButton(
                   icon: Icon(
                     Icons.menu,
-                    color: light ? Colors.black : Colors.white,
+                    color: isDark ? Colors.white : Colors.black,
                   ),
-                  onPressed: () {
-                    _toggleDrawer();
-                  },
+                  onPressed: _toggleDrawer,
                 ),
+          title: Text(
+            _getPageTitle(),
+            style: GoogleFonts.exo2(
+              color: isDark ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           actions: [
+            // if (currentPage == 1) // Only on Student Management page
+            //   IconButton(
+            //     icon: const Icon(Icons.add),
+            //     color: isDark ? Colors.white : Colors.black,
+            //     onPressed: () {
+            //       _studentKey.currentState?.showAddStudentForm();
+            //     },
+            //   ),
             IconButton(
-              onPressed: () {
-                _switchBackground();
-              },
+              onPressed: themeNotifier.toggleTheme,
               icon: Icon(
                 Icons.brightness_6,
-                color: light ? Colors.black : Colors.white,
+                color: isDark ? Colors.white : Colors.black,
               ),
             ),
           ],
@@ -109,9 +146,9 @@ class _AdminSideBarState extends State<AdminSideBar> {
               UserAccountsDrawerHeader(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: light
-                        ? [Colors.pinkAccent, Colors.deepPurpleAccent]
-                        : [Colors.deepPurple, Colors.black87],
+                    colors: isDark
+                        ? [Colors.deepPurple, Colors.black87]
+                        : [Colors.pinkAccent, Colors.deepPurpleAccent],
                   ),
                 ),
                 currentAccountPicture: const CircleAvatar(
@@ -129,57 +166,23 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 ),
                 accountEmail: const Text("Administrator"),
               ),
-
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
                     _buildGroupTitle("Management"),
-                    _buildDrawerItem(Icons.home, "Home", 0, light),
-                    _buildDrawerItem(
-                      Icons.account_circle,
-                      "Student Management",
-                      1,
-                      light,
-                    ),
-                    _buildDrawerItem(
-                      Icons.room,
-                      "Room / Bed Management",
-                      2,
-                      light,
-                    ),
-                    _buildDrawerItem(
-                      Icons.person_2,
-                      "Visitor Management",
-                      3,
-                      light,
-                    ),
-
+                    _buildDrawerItem(Icons.home, "Home", 0, isDark),
+                    _buildDrawerItem(Icons.account_circle, "Student Management", 1, isDark),
+                    _buildDrawerItem(Icons.room, "Room / Bed Management", 2, isDark),
+                    _buildDrawerItem(Icons.person_2, "Visitor Management", 3, isDark),
                     _buildGroupTitle("Communication"),
-                    _buildDrawerItem(
-                      Icons.emergency,
-                      "Emergency Request",
-                      4,
-                      light,
-                    ),
-                    _buildDrawerItem(
-                      Icons.notifications,
-                      "Notice Board",
-                      5,
-                      light,
-                    ),
-
+                    _buildDrawerItem(Icons.emergency, "Emergency Request", 4, isDark),
+                    _buildDrawerItem(Icons.notifications, "Notice Board", 5, isDark),
                     _buildGroupTitle("Settings"),
-                    _buildDrawerItem(
-                      Icons.settings,
-                      "Settings / Profile",
-                      6,
-                      light,
-                    ),
+                    _buildDrawerItem(Icons.settings, "Settings / Profile", 6, isDark),
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
@@ -207,7 +210,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
     );
   }
 
-  Widget _buildDrawerItem(IconData icon, String title, int index, bool light) {
+  Widget _buildDrawerItem(IconData icon, String title, int index, bool isDark) {
     final bool isSelected = currentPage == index;
 
     return InkWell(
@@ -217,9 +220,9 @@ class _AdminSideBarState extends State<AdminSideBar> {
         decoration: isSelected
             ? BoxDecoration(
                 gradient: LinearGradient(
-                  colors: light
-                      ? [Colors.pinkAccent, Colors.deepPurpleAccent]
-                      : [Colors.deepPurple, Colors.black87],
+                  colors: isDark
+                      ? [Colors.deepPurple, Colors.black87]
+                      : [Colors.pinkAccent, Colors.deepPurpleAccent],
                 ),
                 borderRadius: BorderRadius.circular(30),
               )
@@ -227,16 +230,12 @@ class _AdminSideBarState extends State<AdminSideBar> {
         child: ListTile(
           leading: Icon(
             icon,
-            color: isSelected
-                ? Colors.white
-                : (light ? Colors.black : Colors.white),
+            color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
           ),
           title: Text(
             title,
             style: GoogleFonts.exo2(
-              color: isSelected
-                  ? Colors.white
-                  : (light ? Colors.black : Colors.white),
+              color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),

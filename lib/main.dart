@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_management/admin/admin_home.dart';
 import 'package:hostel_management/admin/admin_sidebar.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'admin/theme_notifier.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(HostelManagement());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: const HostelManagement(),
+    ),
+  );
 }
 
 class HostelManagement extends StatelessWidget {
@@ -14,6 +22,16 @@ class HostelManagement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: AdminSideBar());
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: themeNotifier.currentThemeMode,
+          home: const AdminSideBar(),
+        );
+      },
+    );
   }
 }

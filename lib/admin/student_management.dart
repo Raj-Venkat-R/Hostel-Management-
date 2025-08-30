@@ -12,7 +12,6 @@ class _StudentManagementState extends State<StudentManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      
     );
   }
 }

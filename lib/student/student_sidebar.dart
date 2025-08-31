@@ -3,29 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hostel_management/login.dart';
 import 'package:provider/provider.dart';
 
-import 'admin_home.dart';
-import 'admin_settings.dart';
-import 'emergency_request.dart';
-import 'notice_board.dart';
-import 'room_bed_management.dart';
-import 'student_management.dart';
-import '../theme_notifier.dart';
+import 'student_home.dart';
+import 'student_notice.dart';
+import 'student_emergency.dart';
+import 'student_outpass.dart';
+import 'student_settings.dart';
+import 'package:hostel_management/theme_notifier.dart';
 
-class AdminSideBar extends StatefulWidget {
-  const AdminSideBar({super.key});
+class StudentSideBar extends StatefulWidget {
+  const StudentSideBar({super.key});
 
   @override
-  State<AdminSideBar> createState() => _AdminSideBarState();
+  State<StudentSideBar> createState() => _StudentSideBarState();
 }
 
-class _AdminSideBarState extends State<AdminSideBar> {
+class _StudentSideBarState extends State<StudentSideBar> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isDrawerOpen = false;
   int currentPage = 0;
-
-  // GlobalKey to access StudentManagementState
-  // final GlobalKey<StudentManagementState> _studentKey =
-  //     GlobalKey<StudentManagementState>();
 
   late final List<Widget> _pages;
 
@@ -33,12 +28,11 @@ class _AdminSideBarState extends State<AdminSideBar> {
   void initState() {
     super.initState();
     _pages = [
-      const AdminHome(),
-      StudentManagement(),
-      const RoomBedManagement(),
-      const EmergencyRequest(),
-      const NoticeBoard(),
-      const AdminSettings(),
+      const StudentHome(),
+      const StudentNotice(),
+      const StudentEmergency(),
+      const StudentOutpass(),
+      const StudentSettings(),
     ];
   }
 
@@ -61,14 +55,12 @@ class _AdminSideBarState extends State<AdminSideBar> {
       case 0:
         return "Home";
       case 1:
-        return "Student Management";
+        return "Notice";
       case 2:
-        return "Room / Bed Management";
+        return "Emergency";
       case 3:
-        return "Emergency Request";
+        return "Outpass";
       case 4:
-        return "Notice Board";
-      case 5:
         return "Settings";
       default:
         return "";
@@ -114,14 +106,6 @@ class _AdminSideBarState extends State<AdminSideBar> {
             ),
           ),
           actions: [
-            // if (currentPage == 1) // Only on Student Management page
-            //   IconButton(
-            //     icon: const Icon(Icons.add),
-            //     color: isDark ? Colors.white : Colors.black,
-            //     onPressed: () {
-            //       _studentKey.currentState?.showAddStudentForm();
-            //     },
-            //   ),
             IconButton(
               onPressed: themeNotifier.toggleTheme,
               icon: Icon(
@@ -149,32 +133,30 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 ),
                 currentAccountPicture: const CircleAvatar(
                   backgroundImage: NetworkImage(
-                    "https://imgs.search.brave.com/Gir6JKSLYSYPi0wtcy_yLjrb4FX7ca2AuIQrB_Yf1L8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzQwLzJh/L2Y1LzQwMmFmNWNk/MjQ3MWIxMjI5OGQ1/NDZjODJiMjAxOTg4/LmpwZw",
+                    "https://imgs.search.brave.com/vF27fXxXUM4ThRhr7sCPp2o9DIm0v5uLZ9xSkZbxXyQ/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pLmli/Yi5jby9wcm9maWxl/LWltYWdlcy9kZWZl/YXVsdC11c2VyLnBu/Zw",
                   ),
                 ),
                 accountName: Text(
-                  "Admin Name",
+                  "Student Name",
                   style: GoogleFonts.exo2(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
-                accountEmail: const Text("Administrator"),
+                accountEmail: const Text("Student"),
               ),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
-                    _buildGroupTitle("Management"),
+                    _buildGroupTitle("Main"),
                     _buildDrawerItem(Icons.home, "Home", 0, isDark),
-                    _buildDrawerItem(Icons.account_circle, "Student Management", 1, isDark),
-                    _buildDrawerItem(Icons.room, "Room / Bed Management", 2, isDark),
-                    _buildGroupTitle("Communication"),
-                    _buildDrawerItem(Icons.emergency, "Emergency Request", 3, isDark),
-                    _buildDrawerItem(Icons.notifications, "Notice Board", 4, isDark),
+                    _buildDrawerItem(Icons.notifications, "Notice", 1, isDark),
+                    _buildDrawerItem(Icons.emergency, "Emergency", 2, isDark),
+                    _buildDrawerItem(Icons.exit_to_app, "Outpass", 3, isDark),
                     _buildGroupTitle("Settings"),
-                    _buildDrawerItem(Icons.settings, "Settings / Profile", 5, isDark),
+                    _buildDrawerItem(Icons.settings, "Settings", 4, isDark),
                   ],
                 ),
               ),
@@ -190,9 +172,9 @@ class _AdminSideBarState extends State<AdminSideBar> {
                     style: GoogleFonts.exo2(color: Colors.red),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
                     );
                   },
                 ),

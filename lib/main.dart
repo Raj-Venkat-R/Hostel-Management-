@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hostel_management/admin/admin_home.dart';
 import 'package:hostel_management/admin/admin_sidebar.dart';
+import 'package:hostel_management/login.dart';
+import 'package:hostel_management/student/student_sidebar.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'admin/theme_notifier.dart';
+import 'theme_notifier.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -29,7 +31,7 @@ class HostelManagement extends StatelessWidget {
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: themeNotifier.currentThemeMode,
-          home: const AdminSideBar(),
+          home: const StudentSideBar(),
         );
       },
     );

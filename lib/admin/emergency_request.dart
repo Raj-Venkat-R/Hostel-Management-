@@ -16,7 +16,7 @@ class _EmergencyRequestState extends State<EmergencyRequest> {
   String filterStatus = "All"; // All / Pending / Resolved
 
   final CollectionReference _emergencyCol =
-      FirebaseFirestore.instance.collection('emergencyRequests');
+      FirebaseFirestore.instance.collection('emergencies');
 
   Future<void> _markResolved(String docId) async {
     await _emergencyCol.doc(docId).update({'status': 'Resolved'});

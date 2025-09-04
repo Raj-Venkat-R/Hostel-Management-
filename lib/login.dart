@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hostel_management/admin/admin_sidebar.dart';
 import 'package:hostel_management/student/student_home.dart';
+import 'package:hostel_management/student/student_sidebar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (isApproved) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => StudentHome()),
+            MaterialPageRoute(builder: (_) => StudentSideBar()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -24,8 +24,8 @@ class _StudentManagementState extends State<StudentManagement> {
   final TextEditingController _courseController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
 
-  final CollectionReference studentsCollection = FirebaseFirestore.instance
-      .collection('students');
+  final CollectionReference studentsCollection =
+      FirebaseFirestore.instance.collection('students');
 
   // Add or Update Student with Firebase Auth
   Future<void> saveStudent({bool isEdit = false}) async {
@@ -41,21 +41,34 @@ class _StudentManagementState extends State<StudentManagement> {
 
     try {
       if (!isEdit) {
+        // create new Auth user
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: phone,
         );
-      }
 
-      await studentsCollection.doc(regNo).set({
-        "name": name,
-        "roomNo": roomNo,
-        "email": email,
-        "phone": phone,
-        "course": course,
-        "year": year,
-        "isApproved": isEdit ? true : false,
-      });
+        // Add new student to Firestore
+        await studentsCollection.doc(regNo).set({
+          "name": name,
+          "roomNo": roomNo,
+          "email": email,
+          "phone": phone,
+          "course": course,
+          "year": year,
+          "isApproved": false,
+        });
+      } else {
+        // Update existing student
+        await studentsCollection.doc(regNo).update({
+          "name": name,
+          "roomNo": roomNo,
+          "email": email,
+          "phone": phone,
+          "course": course,
+          "year": year,
+          "isApproved": true,
+        });
+      }
 
       clearControllers();
 
@@ -137,15 +150,18 @@ class _StudentManagementState extends State<StudentManagement> {
   }
 
   void openStudentDialog({Map<String, dynamic>? student, bool isEdit = false}) {
-    if (isEdit && student != null) {
-      _regNoController.text = student['regNo'];
-      _nameController.text = student['name'];
-      _roomController.text = student['roomNo'];
-      _emailController.text = student['email'];
-      _phoneController.text = student['phone'];
-      _courseController.text = student['course'];
-      _yearController.text = student['year'];
-    }
+  if (isEdit && student != null) {
+    _regNoController.text = (student['regNo'] ?? '').toString();
+    _nameController.text = (student['name'] ?? '').toString();
+    _roomController.text = (student['roomNo'] ?? '').toString();
+    _emailController.text = (student['email'] ?? '').toString();
+    _phoneController.text = (student['phone'] ?? '').toString();
+    _courseController.text = (student['course'] ?? '').toString();
+    _yearController.text = (student['year'] ?? '').toString();
+  } else {
+    clearControllers(); // clear when adding new student
+  }
+
 
     showModalBottomSheet(
       context: context,
@@ -157,8 +173,8 @@ class _StudentManagementState extends State<StudentManagement> {
           gradient: LinearGradient(
             colors:
                 Provider.of<ThemeNotifier>(context, listen: false).isDarkMode
-                ? [Colors.deepPurple, Colors.black87]
-                : [Colors.pinkAccent, Colors.deepPurpleAccent],
+                    ? [Colors.deepPurple, Colors.black87]
+                    : [Colors.pinkAccent, Colors.deepPurpleAccent],
           ),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
@@ -193,11 +209,11 @@ class _StudentManagementState extends State<StudentManagement> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           Provider.of<ThemeNotifier>(
-                            context,
-                            listen: false,
-                          ).isDarkMode
-                          ? Colors.deepPurple
-                          : Colors.pinkAccent,
+                        context,
+                        listen: false,
+                      ).isDarkMode
+                              ? Colors.deepPurple
+                              : Colors.pinkAccent,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -217,11 +233,11 @@ class _StudentManagementState extends State<StudentManagement> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           Provider.of<ThemeNotifier>(
-                            context,
-                            listen: false,
-                          ).isDarkMode
-                          ? Colors.deepPurple
-                          : Colors.pinkAccent,
+                        context,
+                        listen: false,
+                      ).isDarkMode
+                              ? Colors.deepPurple
+                              : Colors.pinkAccent,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -286,8 +302,9 @@ class _StudentManagementState extends State<StudentManagement> {
       body: StreamBuilder<QuerySnapshot>(
         stream: studentsCollection.snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
 
           final students = snapshot.data!.docs.where((doc) {
             final data = doc.data() as Map<String, dynamic>;
@@ -388,8 +405,8 @@ class _StudentManagementState extends State<StudentManagement> {
       floatingActionButton: FloatingActionButton(
         backgroundColor:
             Provider.of<ThemeNotifier>(context, listen: false).isDarkMode
-            ? Colors.deepPurple
-            : Colors.pinkAccent,
+                ? Colors.deepPurple
+                : Colors.pinkAccent,
         child: const Icon(Icons.add),
         onPressed: () => openStudentDialog(),
       ),

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'student_home.dart';
 import 'student_notice.dart';
 import 'student_emergency.dart';
-import 'student_outpass.dart';
 import 'student_settings.dart';
 import 'package:hostel_management/theme_notifier.dart';
 
@@ -31,7 +30,6 @@ class _StudentSideBarState extends State<StudentSideBar> {
       const StudentHome(),
       const StudentNotice(),
       const StudentEmergency(),
-      const StudentOutpass(),
       const StudentSettings(),
     ];
   }
@@ -59,8 +57,6 @@ class _StudentSideBarState extends State<StudentSideBar> {
       case 2:
         return "Emergency";
       case 3:
-        return "Outpass";
-      case 4:
         return "Settings";
       default:
         return "";
@@ -154,9 +150,8 @@ class _StudentSideBarState extends State<StudentSideBar> {
                     _buildDrawerItem(Icons.home, "Home", 0, isDark),
                     _buildDrawerItem(Icons.notifications, "Notice", 1, isDark),
                     _buildDrawerItem(Icons.emergency, "Emergency", 2, isDark),
-                    _buildDrawerItem(Icons.exit_to_app, "Outpass", 3, isDark),
                     _buildGroupTitle("Settings"),
-                    _buildDrawerItem(Icons.settings, "Settings", 4, isDark),
+                    _buildDrawerItem(Icons.settings, "Settings", 3, isDark),
                   ],
                 ),
               ),

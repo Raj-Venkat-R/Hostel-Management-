@@ -4,7 +4,6 @@ import 'package:hostel_management/login.dart';
 import 'package:provider/provider.dart';
 
 import 'admin_home.dart';
-import 'admin_settings.dart';
 import 'emergency_request.dart';
 import 'notice_board.dart';
 import 'room_bed_management.dart';
@@ -22,11 +21,6 @@ class _AdminSideBarState extends State<AdminSideBar> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isDrawerOpen = false;
   int currentPage = 0;
-
-  // GlobalKey to access StudentManagementState
-  // final GlobalKey<StudentManagementState> _studentKey =
-  //     GlobalKey<StudentManagementState>();
-
   late final List<Widget> _pages;
 
   @override
@@ -38,7 +32,6 @@ class _AdminSideBarState extends State<AdminSideBar> {
       const RoomBedManagement(),
       const EmergencyRequest(),
       const NoticeBoard(),
-      const AdminSettings(),
     ];
   }
 
@@ -68,8 +61,6 @@ class _AdminSideBarState extends State<AdminSideBar> {
         return "Emergency Request";
       case 4:
         return "Notice Board";
-      case 5:
-        return "Settings";
       default:
         return "";
     }
@@ -114,14 +105,6 @@ class _AdminSideBarState extends State<AdminSideBar> {
             ),
           ),
           actions: [
-            // if (currentPage == 1) // Only on Student Management page
-            //   IconButton(
-            //     icon: const Icon(Icons.add),
-            //     color: isDark ? Colors.white : Colors.black,
-            //     onPressed: () {
-            //       _studentKey.currentState?.showAddStudentForm();
-            //     },
-            //   ),
             IconButton(
               onPressed: themeNotifier.toggleTheme,
               icon: Icon(
@@ -136,7 +119,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
           width: 240,
           backgroundColor: Colors.transparent,
           elevation: 5,
-          surfaceTintColor: Colors.transparent,
+          surfaceTintColor: Colors.black,
           child: Column(
             children: [
               UserAccountsDrawerHeader(
@@ -166,15 +149,31 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
-                    _buildGroupTitle("Management"),
                     _buildDrawerItem(Icons.home, "Home", 0, isDark),
-                    _buildDrawerItem(Icons.account_circle, "Student Management", 1, isDark),
-                    _buildDrawerItem(Icons.room, "Room / Bed Management", 2, isDark),
-                    _buildGroupTitle("Communication"),
-                    _buildDrawerItem(Icons.emergency, "Emergency Request", 3, isDark),
-                    _buildDrawerItem(Icons.notifications, "Notice Board", 4, isDark),
-                    _buildGroupTitle("Settings"),
-                    _buildDrawerItem(Icons.settings, "Settings / Profile", 5, isDark),
+                    _buildDrawerItem(
+                      Icons.account_circle,
+                      "Student Management",
+                      1,
+                      isDark,
+                    ),
+                    _buildDrawerItem(
+                      Icons.room,
+                      "Room / Bed Management",
+                      2,
+                      isDark,
+                    ),
+                    _buildDrawerItem(
+                      Icons.emergency,
+                      "Emergency Request",
+                      3,
+                      isDark,
+                    ),
+                    _buildDrawerItem(
+                      Icons.notifications,
+                      "Notice Board",
+                      4,
+                      isDark,
+                    ),
                   ],
                 ),
               ),
@@ -225,29 +224,19 @@ class _AdminSideBarState extends State<AdminSideBar> {
         child: ListTile(
           leading: Icon(
             icon,
-            color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
+            color: isSelected
+                ? Colors.white
+                : (isDark ? Colors.white : Colors.black),
           ),
           title: Text(
             title,
             style: GoogleFonts.exo2(
-              color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
+              color: isSelected
+                  ? Colors.white
+                  : (isDark ? Colors.white : Colors.black),
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGroupTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, top: 10, bottom: 6),
-      child: Text(
-        title.toUpperCase(),
-        style: GoogleFonts.exo2(
-          fontWeight: FontWeight.bold,
-          color: Colors.grey,
-          fontSize: 14,
         ),
       ),
     );

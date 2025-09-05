@@ -31,7 +31,7 @@ class HostelManagement extends StatelessWidget {
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: themeNotifier.currentThemeMode,
-          home: const AdminSideBar(),
+          home: const StudentSideBar(),
         );
       },
     );

@@ -10,28 +10,39 @@ class StudentService {
     return _auth.currentUser!.uid;
   }
 
-  /// Fetch current student's Firestore document
-  Future<DocumentSnapshot<Map<String, dynamic>>> getStudentDoc() async {
+  /// 🔹 Get Register Number (documentId) mapped to this UID
+  Future<String?> getRegisterNumber() async {
     final uid = getCurrentUid();
-    return await _firestore.collection('students').doc(uid).get();
-  }
 
-  /// Get studentId (Register Number) automatically
-  Future<String?> getStudentId() async {
-    final doc = await getStudentDoc();
-    if (doc.exists && doc.data() != null) {
-      return doc.data()!['registerNumber'] ?? '';
+    // Find student doc where 'uid' matches
+    final query = await _firestore
+        .collection('students')
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get();
+
+    if (query.docs.isNotEmpty) {
+      return query.docs.first.id; // ✅ documentId = Register Number
     }
     return null;
   }
 
-  /// Send Emergency Request
+  /// 🔹 Fetch current student's Firestore document
+  Future<DocumentSnapshot<Map<String, dynamic>>> getStudentDoc() async {
+    final registerNumber = await getRegisterNumber();
+    if (registerNumber == null) {
+      throw Exception("Student document not found for this UID.");
+    }
+    return await _firestore.collection('students').doc(registerNumber).get();
+  }
+
+  /// 🔹 Send Emergency Request
   Future<void> sendEmergencyRequest(String message) async {
     final uid = getCurrentUid();
-    final studentId = await getStudentId();
+    final registerNumber = await getRegisterNumber();
 
     await _firestore.collection('emergencies').add({
-      'studentId': studentId,
+      'studentId': registerNumber,
       'uid': uid,
       'message': message,
       'timestamp': FieldValue.serverTimestamp(),
@@ -39,13 +50,13 @@ class StudentService {
     });
   }
 
-  /// Send Visitor Request
+  /// 🔹 Send Visitor Request
   Future<void> sendVisitorRequest(String visitorName, String purpose) async {
     final uid = getCurrentUid();
-    final studentId = await getStudentId();
+    final registerNumber = await getRegisterNumber();
 
     await _firestore.collection('visitors').add({
-      'studentId': studentId,
+      'studentId': registerNumber,
       'uid': uid,
       'visitorName': visitorName,
       'purpose': purpose,
@@ -54,13 +65,13 @@ class StudentService {
     });
   }
 
-  /// Apply for Outpass
+  /// 🔹 Apply for Outpass
   Future<void> requestOutpass(String reason, DateTime from, DateTime to) async {
     final uid = getCurrentUid();
-    final studentId = await getStudentId();
+    final registerNumber = await getRegisterNumber();
 
     await _firestore.collection('outpass').add({
-      'studentId': studentId,
+      'studentId': registerNumber,
       'uid': uid,
       'reason': reason,
       'fromDate': from,

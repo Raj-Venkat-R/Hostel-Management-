@@ -13,7 +13,7 @@ class EmergencyRequest extends StatefulWidget {
 
 class _EmergencyRequestState extends State<EmergencyRequest> {
   String searchQuery = "";
-  String filterStatus = "All"; // All / Pending / Resolved
+  String filterStatus = "All"; 
 
   final CollectionReference _emergencyCol =
       FirebaseFirestore.instance.collection('emergencies');
@@ -26,7 +26,6 @@ class _EmergencyRequestState extends State<EmergencyRequest> {
     );
   }
 
-  // Helper to format Timestamp
   String _formatTimestamp(dynamic ts) {
     if (ts == null) return "Unknown";
     if (ts is Timestamp) {
@@ -145,7 +144,6 @@ class _EmergencyRequestState extends State<EmergencyRequest> {
     );
   }
 
-  // Client-side filtering after snapshot
   List<QueryDocumentSnapshot> _applyFilters(
       List<QueryDocumentSnapshot> docs) {
     return docs.where((doc) {

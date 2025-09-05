@@ -44,7 +44,6 @@ class _StudentEmergencyState extends State<StudentEmergency> {
     }
   }
 
-  // Emergency dialog confirmation
   void _confirmSend() {
     final isDark = Provider.of<ThemeNotifier>(context, listen: false).isDarkMode;
 

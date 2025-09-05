@@ -147,7 +147,6 @@ class _StudentHomeState extends State<StudentHome> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Text("Welcome, $studentName",
               style: GoogleFonts.exo2(
                   fontSize: 26, fontWeight: FontWeight.bold)),
@@ -159,7 +158,6 @@ class _StudentHomeState extends State<StudentHome> {
                   fontWeight: FontWeight.w400)),
           const SizedBox(height: 20),
 
-          // Room Details Card
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -196,7 +194,6 @@ class _StudentHomeState extends State<StudentHome> {
 
           const SizedBox(height: 20),
 
-          // Student Info Grid
           GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -217,7 +214,6 @@ class _StudentHomeState extends State<StudentHome> {
 
           const SizedBox(height: 20),
 
-          // Recent Notices
           Text("Recent Notices",
               style: GoogleFonts.exo2(
                   fontSize: 20, fontWeight: FontWeight.bold)),

@@ -20,7 +20,6 @@ class _NoticeBoardState extends State<NoticeBoard> {
   final CollectionReference noticesCollection = FirebaseFirestore.instance
       .collection('notices');
 
-  // Add or Update Notice
   Future<void> saveNotice({String? docId, bool isEdit = false}) async {
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
@@ -36,18 +35,15 @@ class _NoticeBoardState extends State<NoticeBoard> {
     }
   }
 
-  // Delete Notice
   Future<void> deleteNotice(String docId) async {
     await noticesCollection.doc(docId).delete();
   }
 
-  // Clear controllers
   void clearControllers() {
     _titleController.clear();
     _descriptionController.clear();
   }
 
-  // Add/Edit notice dialog
   void openNoticeDialog({
     Map<String, dynamic>? notice,
     String? docId,
@@ -153,7 +149,6 @@ class _NoticeBoardState extends State<NoticeBoard> {
     );
   }
 
-  // Show notice details dialog
   void showNoticeDetails(Map<String, dynamic> notice, bool isDark) {
     showDialog(
       context: context,
@@ -213,7 +208,6 @@ class _NoticeBoardState extends State<NoticeBoard> {
     );
   }
 
-  // Build a simple TextField
   Widget buildTextField(
     TextEditingController controller,
     String label, {

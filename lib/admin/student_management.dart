@@ -27,7 +27,6 @@ class _StudentManagementState extends State<StudentManagement> {
   final CollectionReference studentsCollection =
       FirebaseFirestore.instance.collection('students');
 
-  // Add or Update Student with Firebase Auth
   Future<void> saveStudent({bool isEdit = false}) async {
     final regNo = _regNoController.text.trim();
     final name = _nameController.text.trim();
@@ -41,13 +40,11 @@ class _StudentManagementState extends State<StudentManagement> {
 
     try {
       if (!isEdit) {
-        // create new Auth user
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: phone,
         );
 
-        // Add new student to Firestore
         await studentsCollection.doc(regNo).set({
           "name": name,
           "roomNo": roomNo,
@@ -58,7 +55,6 @@ class _StudentManagementState extends State<StudentManagement> {
           "isApproved": false,
         });
       } else {
-        // Update existing student
         await studentsCollection.doc(regNo).update({
           "name": name,
           "roomNo": roomNo,
@@ -96,12 +92,10 @@ class _StudentManagementState extends State<StudentManagement> {
     }
   }
 
-  // Approve Student
   Future<void> approveStudent(String regNo) async {
     await studentsCollection.doc(regNo).update({"isApproved": true});
   }
 
-  // Delete Student and attempt to delete Auth credential
   Future<void> deleteStudent(String regNo) async {
     try {
       final doc = await studentsCollection.doc(regNo).get();
@@ -110,10 +104,8 @@ class _StudentManagementState extends State<StudentManagement> {
       final data = doc.data() as Map<String, dynamic>;
       final email = data['email'];
 
-      // Delete Firestore student record
       await studentsCollection.doc(regNo).delete();
 
-      // Inform admin that Auth user still exists
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -159,7 +151,7 @@ class _StudentManagementState extends State<StudentManagement> {
     _courseController.text = (student['course'] ?? '').toString();
     _yearController.text = (student['year'] ?? '').toString();
   } else {
-    clearControllers(); // clear when adding new student
+    clearControllers(); 
   }
 
 

@@ -22,7 +22,6 @@ class _RoomBedManagementState extends State<RoomBedManagement> {
   final CollectionReference roomsCollection = FirebaseFirestore.instance
       .collection('rooms');
 
-  // Add/Edit Room
   Future<void> saveRoom({String? docId, bool isEdit = false}) async {
     final roomNo = _roomNoController.text.trim();
     final bedCount = int.tryParse(_bedCountController.text.trim()) ?? 0;
@@ -44,7 +43,6 @@ class _RoomBedManagementState extends State<RoomBedManagement> {
     }
   }
 
-  // Delete Room
   Future<void> deleteRoom(String docId) async {
     await roomsCollection.doc(docId).delete();
   }
@@ -56,7 +54,6 @@ class _RoomBedManagementState extends State<RoomBedManagement> {
     _floorController.clear();
   }
 
-  // Add/Edit Room dialog
   void openRoomDialog({
     Map<String, dynamic>? room,
     String? docId,
@@ -165,7 +162,6 @@ class _RoomBedManagementState extends State<RoomBedManagement> {
     );
   }
 
-  // Show room details
   void showRoomDetails(Map<String, dynamic> room, String roomNo, bool isDark) {
     showDialog(
       context: context,

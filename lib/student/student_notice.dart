@@ -16,7 +16,6 @@ class _StudentNoticeState extends State<StudentNotice> {
   final CollectionReference noticesCollection =
       FirebaseFirestore.instance.collection('notices');
 
-  // Show notice details dialog
   void showNoticeDetails(Map<String, dynamic> notice, bool isDark) {
     showDialog(
       context: context,

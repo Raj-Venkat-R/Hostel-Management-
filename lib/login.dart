@@ -31,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = _passwordController.text.trim();
 
     if (isAdmin) {
-      // Admin Login using Firebase Auth
       try {
         final credential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -39,7 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
           password: password,
         );
 
-        // Check user collection for admin data
         final userDoc = await FirebaseFirestore.instance
             .collection('user')
             .doc(credential.user!.uid)
@@ -62,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } else {
-      // Student login using Firestore
       final snapshot = await FirebaseFirestore.instance
           .collection('students')
           .where('email', isEqualTo: email)
@@ -186,7 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-/// Student Registration Screen
 class StudentRegistrationScreen extends StatefulWidget {
   const StudentRegistrationScreen({super.key});
 

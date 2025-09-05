@@ -1,16 +1,40 @@
-# hostel_management
+# 🏨 Hostel Management App  
 
-A new Flutter project.
+A **Flutter + Firebase** project for managing hostel operations with separate **Admin** and **Student** dashboards.  
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Getting Started  
 
-A few resources to get you started if this is your first Flutter project:
+This project helps in **room allocation, student management, and hostel communication**.  
+It is built using **Flutter** for cross-platform support and **Firebase** for authentication & database.  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📌 Features  
+
+- 🔑 **Authentication** – Admin & Student login (Firebase Auth)  
+- 👨‍💼 **Admin Dashboard** – Manage rooms, beds, and students  
+- 🎓 **Student Dashboard** – View room details, profile info, and notices  
+- 📢 **Notices & Emergencies** – Admin can post, students can view  
+- ⚙️ **Settings** – Profile management & logout  
+
+---
+
+## 🔧 Installation  
+
+1. **Clone the repository**  
+   ```bash
+   git clone https://github.com/your-username/hostel_management.git
+   cd hostel_management
+   flutter pub get
+
+2. **Setup Firebase**  
+   -Enable Authentication (Email/Password)
+   -Enable Firestore Database
+   -Add google-services.json to android/app/
+   -Add GoogleService-Info.plist to ios/Runner/
+
+1. **Run the app**  
+   ```bash 
+   flutter run
